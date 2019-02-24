@@ -17,6 +17,7 @@ import com.zeeroapps.sunflower.R;
 import com.zeeroapps.sunflower.adapters.GardenPlantAdapter;
 import com.zeeroapps.sunflower.data.GardenPlanting;
 import com.zeeroapps.sunflower.data.PlantAndGardenPlantings;
+import com.zeeroapps.sunflower.databinding.FragmentGardenBinding;
 import com.zeeroapps.sunflower.utils.InjectorUtils;
 import com.zeeroapps.sunflower.view_models.GardenPlantingListViewModel;
 import com.zeeroapps.sunflower.view_models.GardenPlantingListViewModelFactory;
@@ -28,10 +29,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class GardenFragment extends Fragment {
-
-    List<PlantAndGardenPlantings> plantingsList = new ArrayList<>();
-    RecyclerView mRecyclerView;
-    TextView mTextViewEmptyGarden;
+    private FragmentGardenBinding binding;
 
     public GardenFragment() {
         // Required empty public constructor
@@ -41,14 +39,11 @@ public class GardenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_garden, container, false);
-        GardenPlantAdapter adapter = new GardenPlantAdapter(plantingsList);
-
-        mTextViewEmptyGarden = view.findViewById(R.id.empty_garden);
-        mRecyclerView = view.findViewById(R.id.garden_list);
-        mRecyclerView.setAdapter(adapter);
+        binding = FragmentGardenBinding.inflate(inflater, container, false);
+        GardenPlantAdapter adapter = new GardenPlantAdapter();
+        binding.gardenList.setAdapter(adapter);
         subscribeUI(adapter);
-        return view;
+        return binding.getRoot();
     }
 
     private void subscribeUI(GardenPlantAdapter adapter) {
@@ -57,13 +52,7 @@ public class GardenFragment extends Fragment {
         viewModel.gardenPlantings.observe(getViewLifecycleOwner(), new Observer<List<GardenPlanting>>() {
             @Override
             public void onChanged(@Nullable List<GardenPlanting> gardenPlantings) {
-                if (gardenPlantings != null && !gardenPlantings.isEmpty()) {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mTextViewEmptyGarden.setVisibility(View.GONE);
-                }else {
-                    mRecyclerView.setVisibility(View.GONE);
-                    mTextViewEmptyGarden.setVisibility(View.VISIBLE);
-                }
+                binding.setHasPlantings((gardenPlantings != null && !gardenPlantings.isEmpty()));
             }
         });
 

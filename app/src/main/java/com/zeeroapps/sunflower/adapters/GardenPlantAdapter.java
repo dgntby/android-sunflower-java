@@ -14,14 +14,18 @@ import com.zeeroapps.sunflower.data.PlantAndGardenPlantings;
 import com.zeeroapps.sunflower.databinding.ListItemGardenPlantingBinding;
 import com.zeeroapps.sunflower.view_models.PlantAndGardenPlantingsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GardenPlantAdapter extends RecyclerView.Adapter<GardenPlantAdapter.ViewHolder> {
 
-    List<PlantAndGardenPlantings> plantingsList;
+    List<PlantAndGardenPlantings> plantingsList  = new ArrayList<>();;
 
     public GardenPlantAdapter(List<PlantAndGardenPlantings> plantingsList) {
         this.plantingsList = plantingsList;
+    }
+
+    public GardenPlantAdapter() {
     }
 
     @NonNull
